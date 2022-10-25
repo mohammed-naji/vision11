@@ -65,3 +65,6 @@ Route::get('/news/{id?}', function($id = null) {
 
 Route::get('/contact-new', [TestController::class, 'contact'])->name('contactpage');
 
+Route::get('test', function() {
+    return 'Test page';
+});
