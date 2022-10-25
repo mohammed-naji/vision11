@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Site2Controller;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SiteController;
 use App\Http\Controllers\TestController;
 
 // Route::get('url', 'Action');
@@ -76,3 +78,11 @@ Route::get('test2', function() {
 Route::get('test3', function() {
     return 'Test page';
 });
+
+Route::get('new-page', [SiteController::class, 'sum']);
+
+Route::get('home', [Site2Controller::class, 'home'])->name('site2.home');
+Route::get('about', [Site2Controller::class, 'about'])->name('site2.about');
+Route::get('services', [Site2Controller::class, 'services'])->name('site2.services');
+Route::get('contact', [Site2Controller::class, 'contact'])->name('site2.contact');
+Route::get('team', [Site2Controller::class, 'team'])->name('site2.team');
