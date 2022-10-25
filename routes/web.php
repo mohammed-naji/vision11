@@ -72,3 +72,7 @@ Route::get('test', function() {
 Route::get('test2', function() {
     return 'Test page';
 });
+
+Route::get('test3', function() {
+    return 'Test page';
+});
