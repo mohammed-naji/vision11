@@ -68,3 +68,7 @@ Route::get('/contact-new', [TestController::class, 'contact'])->name('contactpag
 Route::get('test', function() {
     return 'Test page';
 });
+
+Route::get('test2', function() {
+    return 'Test page';
+});
