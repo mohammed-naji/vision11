@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\Site2Controller;
+use App\Http\Controllers\Site3Controller;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\TestController;
@@ -86,3 +88,10 @@ Route::get('about', [Site2Controller::class, 'about'])->name('site2.about');
 Route::get('services', [Site2Controller::class, 'services'])->name('site2.services');
 Route::get('contact', [Site2Controller::class, 'contact'])->name('site2.contact');
 Route::get('team', [Site2Controller::class, 'team'])->name('site2.team');
+
+
+
+Route::get('site3', [Site3Controller::class, 'index'])->name('site3.index');
+
+
+Route::get('css', [ResumeController::class, 'index'])->name('resume.index');
