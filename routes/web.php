@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\CVController;
 use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\Site2Controller;
 use App\Http\Controllers\Site3Controller;
@@ -94,4 +96,20 @@ Route::get('team', [Site2Controller::class, 'team'])->name('site2.team');
 Route::get('site3', [Site3Controller::class, 'index'])->name('site3.index');
 
 
-Route::get('css', [ResumeController::class, 'index'])->name('resume.index');
+Route::get('resume', [ResumeController::class, 'index'])->name('resume.index');
+
+Route::prefix('blog')->name('blog.')->group(function() {
+    Route::get('/', [BlogController::class, 'index'])->name('index');
+    Route::get('/about', [BlogController::class, 'about'])->name('about');
+    Route::get('/contact', [BlogController::class, 'contact'])->name('contact');
+    Route::get('/post', [BlogController::class, 'post'])->name('post');
+});
+
+Route::prefix('cv')->name('cv.')->group(function() {
+    Route::get('/', [CVController::class, 'index'])->name('index');
+    Route::get('/experience', [CVController::class, 'experience'])->name('experience');
+    Route::get('/education', [CVController::class, 'education'])->name('education');
+    Route::get('/skills', [CVController::class, 'skills'])->name('skills');
+    Route::get('/interests', [CVController::class, 'interests'])->name('interests');
+    Route::get('/awards', [CVController::class, 'awards'])->name('awards');
+});
