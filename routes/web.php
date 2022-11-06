@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CVController;
+use App\Http\Controllers\FormController;
 use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\Site2Controller;
 use App\Http\Controllers\Site3Controller;
@@ -113,3 +114,9 @@ Route::prefix('cv')->name('cv.')->group(function() {
     Route::get('/interests', [CVController::class, 'interests'])->name('interests');
     Route::get('/awards', [CVController::class, 'awards'])->name('awards');
 });
+
+Route::get('form1', [FormController::class, 'form1'])->name('form1');
+Route::post('form1', [FormController::class, 'form1_data'])->name('form1_data');
+
+Route::get('form2', [FormController::class, 'form2'])->name('form2');
+Route::post('form2', [FormController::class, 'form2_data'])->name('form2_data');
