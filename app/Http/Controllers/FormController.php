@@ -51,8 +51,11 @@ class FormController extends Controller
             'email' => 'required|email|ends_with:gmail.com',
             'phone' => 'required|min:6|max:20',
             // 'dob' => 'required|before:today',
-            'end' => 'after:start'
+            'end' => 'after:start',
+            'education' => 'required'
         ]);
+
+        dd($request->all());
 
         $name = $request->name;
         $email = $request->email;
@@ -60,5 +63,22 @@ class FormController extends Controller
         $dob = $request->dob;
 
         return view('forms.form2_data', compact('name', 'email', 'phone', 'dob'));
+    }
+
+    public function form3()
+    {
+        return view('forms.form3');
+    }
+
+    public function form3_data(Request $request)
+    {
+        // dd($request->all());
+        // $filename = rand() . time() . $request->file('cv')->getClientOriginalName();
+        $ex = strtolower($request->file('cv')->getClientOriginalExtension());
+        $name = strtolower(str_replace(' ', '-', $request->name));
+        $cvname = $name.'-'.date('d-m-Y-h-i').'-cv.'.$ex;
+
+        $request->file('cv')->move(public_path('uploads'), $cvname);
+
     }
 }
