@@ -11,6 +11,7 @@
 
     <div class="container mt-5">
         <h2>Submit your resume</h2>
+        @include('forms.errors')
         <form action="{{ route('form3_data') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">

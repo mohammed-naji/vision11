@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContactUsMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class FormController extends Controller
 {
@@ -72,6 +74,9 @@ class FormController extends Controller
 
     public function form3_data(Request $request)
     {
+        $request->validate([
+            'cv' => 'required|image'
+        ]);
         // dd($request->all());
         // $filename = rand() . time() . $request->file('cv')->getClientOriginalName();
         $ex = strtolower($request->file('cv')->getClientOriginalExtension());
@@ -79,6 +84,34 @@ class FormController extends Controller
         $cvname = $name.'-'.date('d-m-Y-h-i').'-cv.'.$ex;
 
         $request->file('cv')->move(public_path('uploads'), $cvname);
+
+
+        // File System
+        // $path = $request->file('cv')->store('uploads', 'public');
+        // $path = $request->file('cv')->storeAs('uploads','filename', 'public');
+
+        // return view('show_file', compact('path'));
+    }
+
+    public function mail()
+    {
+        return view('forms.mail');
+    }
+
+    public function mail_data(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|min:2',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'subject' => 'required',
+            'message' => 'required'
+        ]);
+
+        // dd($request->except('_token'));
+
+        Mail::to('sha7in147@gmail.com')->send(new ContactUsMail($request->except('_token')));
+
 
     }
 }

@@ -123,3 +123,6 @@ Route::post('form2', [FormController::class, 'form2_data'])->name('form2_data');
 
 Route::get('form3', [FormController::class, 'form3'])->name('form3');
 Route::post('form3', [FormController::class, 'form3_data'])->name('form3_data');
+
+Route::get('mail', [FormController::class, 'mail'])->name('mail');
+Route::post('mail', [FormController::class, 'mail_data'])->name('mail_data');
