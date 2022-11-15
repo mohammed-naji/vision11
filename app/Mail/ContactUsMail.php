@@ -56,6 +56,8 @@ class ContactUsMail extends Mailable
      */
     public function attachments()
     {
-        return [];
+        return [
+            public_path('/uploads/cv/'.$this->data['cv'])
+        ];
     }
 }

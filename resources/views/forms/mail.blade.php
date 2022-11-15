@@ -24,7 +24,7 @@
     <div class="container mt-5">
         <h2>Simple Contact Us Form</h2>
         {{-- @include('forms.errors') --}}
-        <form action="{{ route('mail_data') }}" method="POST" class="card p-3">
+        <form action="{{ route('mail_data') }}" method="POST" class="card p-3" enctype="multipart/form-data">
             @csrf
 
             <div class="row">
@@ -63,6 +63,16 @@
                         <label>Subject</label>
                         <input type="text" name="subject" placeholder="Subject" class="form-control @error('subject') is-invalid @enderror" value="{{ old('subject') }}" />
                         @error('subject')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label>CV</label>
+                        <input type="file" name="cv" class="form-control @error('cv') is-invalid @enderror"/>
+                        @error('cv')
                             <span class="invalid-feedback">{{ $message }}</span>
                         @enderror
                     </div>

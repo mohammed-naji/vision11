@@ -105,12 +105,22 @@ class FormController extends Controller
             'email' => 'required|email',
             'phone' => 'required',
             'subject' => 'required',
-            'message' => 'required'
+            'message' => 'required',
+            'cv' => 'required|file|mimes:pdf'
         ]);
 
-        // dd($request->except('_token'));
+        $data = $request->except('_token');
 
-        Mail::to('sha7in147@gmail.com')->send(new ContactUsMail($request->except('_token')));
+        // dd($request->except('_token'));
+        $ex = $request->file('cv')->getClientOriginalExtension();
+        $cv_name = strtolower($request->name) . '-cv-'.time().'.'.$ex;
+        $request->file('cv')->move(public_path('uploads/cv'), $cv_name);
+
+        $data['cv'] = $cv_name;
+
+        // dd($request->except('_token'), $data);
+
+        Mail::to('sha7in147@gmail.com')->send(new ContactUsMail($data));
 
 
     }
