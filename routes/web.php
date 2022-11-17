@@ -3,6 +3,7 @@
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CVController;
 use App\Http\Controllers\FormController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\Site2Controller;
 use App\Http\Controllers\Site3Controller;
@@ -126,3 +127,13 @@ Route::post('form3', [FormController::class, 'form3_data'])->name('form3_data');
 
 Route::get('mail', [FormController::class, 'mail'])->name('mail');
 Route::post('mail', [FormController::class, 'mail_data'])->name('mail_data');
+
+
+
+
+// Posts CRUD Routes
+// R => Read
+Route::get('posts', [PostController::class, 'index'])->name('posts.index');
+
+
+
