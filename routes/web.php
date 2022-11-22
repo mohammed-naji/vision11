@@ -134,6 +134,7 @@ Route::post('mail', [FormController::class, 'mail_data'])->name('mail_data');
 // Posts CRUD Routes
 // R => Read
 Route::get('posts', [PostController::class, 'index'])->name('posts.index');
+Route::get('search-posts', [PostController::class, 'search_posts'])->name('posts.search_posts');
 
 
 

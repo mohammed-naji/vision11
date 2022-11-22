@@ -52,6 +52,32 @@
     color: #fff;
 }
 
+.search-wrapper {
+    position: relative;
+}
+.search-result {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    background: #ebebeb;
+    position: absolute;
+    width: 100%;
+    top: 38px;
+    box-shadow: 0px 2px 10px #a3a3a3;
+    border-radius: 3px;
+    display: none;
+}
+
+.search-result a {
+    display: block;
+    text-decoration: none;
+    padding: 8px 15px;
+    color: #000;
+}
+
+.search-result a:hover {
+    background: #cfcfcf;
+}
 
     </style>
 
@@ -61,6 +87,18 @@
 
     <div class="container mt-5">
         <h1>All Posts</h1>
+
+        <div class="search-wrapper">
+            <form action="{{ route('posts.index') }}" method="GET">
+                <div class="input-group mb-3">
+                    <input type="text" id="inp" class="form-control" placeholder="Search here.." >
+                    <button class="btn btn-outline-secondary" id="button-addon2"><i class="fas fa-search"></i></button>
+                </div>
+                <ul class="search-result">
+                </ul>
+            </form>
+        </div>
+
         <table class="table table-bordered table-hover table-striped">
             <tr class="table-dark">
                 <th>ID</th>
@@ -85,6 +123,56 @@
 
         {{ $posts->links() }}
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+
+        // var inp = document.getElementById('inp')
+        // let inp = document.getElementById('inp')
+        let inp = document.querySelector('#inp')
+        let result = document.querySelector('.search-result')
+        // const inp = document.getElementById('inp')
+
+        inp.onblur = () => {
+            result.style.display = 'none';
+        }
+
+        inp.onfocus = () => {
+            if(inp.value.length > 0) {
+                result.style.display = 'block';
+            }
+        }
+
+        inp.onkeyup = () => {
+
+            if(inp.value.length > 0) {
+            // Ajax Request
+            axios.get("{{ route('posts.search_posts') }}", {
+                params: {
+                    keyword: inp.value
+                }
+            })
+            .then(res => {
+
+                result.innerHTML = '';
+
+                res.data.forEach(el => {
+                    let item = `<li><a href="#">${el.title} - ${el.views}</a></li>`;
+                    result.innerHTML += item
+                })
+
+                result.style.display = 'block';
+
+            })
+            }else {
+                result.innerHTML = '';
+                result.style.display = 'none';
+            }
+
+
+
+        }
+    </script>
 
 </body>
 
