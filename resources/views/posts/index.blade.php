@@ -86,7 +86,11 @@
 <body>
 
     <div class="container mt-5">
-        <h1>All Posts</h1>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1>All Posts</h1>
+
+            <a class="btn btn-dark px-5" href="{{ route('posts.create') }}">Add New</a>
+        </div>
 
         <div class="search-wrapper">
             <form action="{{ route('posts.index') }}" method="GET">
@@ -99,20 +103,40 @@
             </form>
         </div>
 
+        @if (session('msg'))
+        <div class="alert alert-success alert-dismissible fade show">
+            {{ session('msg') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+
+
+        {{-- <p>Total: {{ $posts->total() }}</p> --}}
         <table class="table table-bordered table-hover table-striped">
             <tr class="table-dark">
                 <th>ID</th>
                 <th>Title</th>
                 <th>Image</th>
                 <th>Views</th>
+                <th>Created At</th>
+                <th>Updated At</th>
                 <th>Actions</th>
             </tr>
             @foreach ($posts as $post)
                 <tr>
                     <td>{{ $post->id }}</td>
                     <td>{{ $post->title }}</td>
-                    <td><img width="80" src="{{ $post->image }}" alt=""></td>
+                    <td><img width="80" src="{{ asset('uploads/'.$post->image) }}" alt=""></td>
                     <td>{{ $post->views }}</td>
+                    <td>{{ $post->created_at->format('F d, Y') }}</td>
+                    {{-- <td>{{ $post->updated_at->diffForHumans() }}</td> --}}
+                    <td>
+                        @if ($post->created_at == $post->updated_at)
+                            Not updated yet
+                        @else
+                            {{ $post->updated_at->diffForHumans() }}
+                        @endif
+                    </td>
                     <td>
                         <a href="#" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
                         <a href="#" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
@@ -123,9 +147,18 @@
 
         {{ $posts->links() }}
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
+
+        setTimeout(() => {
+            document.querySelector('.alert-success').style.display = 'none';
+        }, 3000);
+
+        // setInterval(() => {
+        //     console.log('Interval');
+        // }, 1000);
 
         // var inp = document.getElementById('inp')
         // let inp = document.getElementById('inp')

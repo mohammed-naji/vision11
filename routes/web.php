@@ -136,5 +136,9 @@ Route::post('mail', [FormController::class, 'mail_data'])->name('mail_data');
 Route::get('posts', [PostController::class, 'index'])->name('posts.index');
 Route::get('search-posts', [PostController::class, 'search_posts'])->name('posts.search_posts');
 
+// C => Create
+Route::get('posts/create', [PostController::class, 'create'])->name('posts.create');
+Route::post('posts/store', [PostController::class, 'store'])->name('posts.store');
+
 
 
