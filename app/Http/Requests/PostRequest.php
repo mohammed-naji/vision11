@@ -23,9 +23,14 @@ class PostRequest extends FormRequest
      */
     public function rules()
     {
+        $rule = 'required|image|mimes:png,jpg,jpeg|max:2048';
+        if($this->method() == 'PUT') {
+            $rule = 'nullable|image|mimes:png,jpg,jpeg|max:2048';
+        }
+
         return [
             'title' => 'required|min:4',
-            'image' => 'required|image|mimes:png,jpg,jpeg|max:2048',
+            'image' => $rule,
             'body' => 'required'
         ];
     }

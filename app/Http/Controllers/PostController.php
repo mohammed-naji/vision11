@@ -6,6 +6,7 @@ use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class PostController extends Controller
 {
@@ -77,5 +78,44 @@ class PostController extends Controller
         // 4 Redirect to Another Page
         // dd($request->all());
         return redirect()->route('posts.index')->with('msg', 'Post added successfully');
+    }
+
+    public function edit($id)
+    {
+        $post = Post::findOrFail($id);
+        return view('posts.edit', compact('post'));
+    }
+
+    public function update(PostRequest $request, $id)
+    {
+
+        $post = Post::findOrFail($id);
+
+        $img_name = $post->image;
+        if($request->hasFile('image')) {
+            $img_name = time().rand().$request->file('image')->getClientOriginalName();
+            $request->file('image')->move(public_path('uploads'), $img_name);
+        }
+
+
+        $post->update([
+            'title' => $request->title,
+            'image' => $img_name,
+            'body' => $request->body
+        ]);
+
+        return $post;
+    }
+
+    public function destroy($id)
+    {
+        // Post::destroy($id);
+        $post = Post::findOrFail($id);
+
+        File::delete(public_path('uploads/'.$post->image));
+
+        $post->delete();
+
+        return redirect()->route('posts.index')->with('msg', 'Post deleted successfully');
     }
 }
