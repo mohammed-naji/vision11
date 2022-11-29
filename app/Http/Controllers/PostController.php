@@ -15,7 +15,7 @@ class PostController extends Controller
         // $posts = Post::all();
         // $posts = Post::latest('id')->paginate(20);
         // $posts = Post::orderBy('id', 'desc')->paginate(20);
-        $posts = Post::orderByDesc('id')->paginate(5);
+        // $posts = Post::orderByDesc('id')->paginate(10);
         $posts_count = Post::count();
         // dd($posts_count);
         // $posts = Post::simplepaginate(20);
@@ -33,6 +33,18 @@ class PostController extends Controller
         // $user = User::where('email', 'moh@gmail.com')->first();
 
         // dd($user->name);
+
+        // dd(request()->has('keyword'));
+        if(request()->has('keyword')) {
+            $posts = Post::where('title', 'like', '%'.request()->keyword.'%')
+            ->orWhere('body','like', '%'. request()->keyword.'%')
+            ->orWhere('views', request()->keyword)
+            ->paginate(10);
+        }else {
+            $posts = Post::orderByDesc('id')->paginate(10);
+        }
+
+
 
 
         return view('posts.index', compact('posts'));
@@ -116,6 +128,17 @@ class PostController extends Controller
 
         $post->delete();
 
-        return redirect()->route('posts.index')->with('msg', 'Post deleted successfully');
+        return $id;
+        // return redirect()->route('posts.index')->with('msg', 'Post deleted successfully');
+    }
+
+    public function check_email(Request $request)
+    {
+        $user = User::where('email', $request->txt)->first();
+        if($user) {
+            return 1;
+        }else {
+            return 0;
+        }
     }
 }

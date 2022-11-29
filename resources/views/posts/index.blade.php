@@ -119,6 +119,14 @@
 </head>
 
 <body>
+    {{-- http://127.0.0.1:8000/posts?keyword=ne
+    http://127.0.0.1:8000/posts --}}
+
+    {{-- Jsut For Test --}}
+
+    <div class="container mt-5">
+        <input type="text" id="inemail" class="form-control">
+    </div>
 
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -127,10 +135,15 @@
             <a class="btn btn-dark px-5" href="{{ route('posts.create') }}">Add New</a>
         </div>
 
+        {{-- http://127.0.0.1:8000/posts?keyword=dolo
+        http://127.0.0.1:8000/posts?page=2&keyword=dolo --}}
+
+        {{-- http://127.0.0.1:8000/posts?keyword=dolo&page=2 --}}
+
         <div class="search-wrapper">
             <form action="{{ route('posts.index') }}" method="GET">
                 <div class="input-group mb-3">
-                    <input type="text" id="inp" class="form-control" placeholder="Search here..">
+                    <input type="text" id="inp" class="form-control" value="{{ request()->keyword }}" name="keyword" placeholder="Search here..">
                     <button class="btn btn-outline-secondary" id="button-addon2"><i class="fas fa-search"></i></button>
                 </div>
                 <ul class="search-result">
@@ -156,6 +169,12 @@
                     </div>
                     <form id="edit_form" action="" method="POST" enctype="multipart/form-data">
                         <div class="modal-body">
+
+                            <div class="alert alert-danger d-none">
+                                <ul>
+                                </ul>
+                            </div>
+
                             @csrf
                             @method('put')
                             <div class="mb-3">
@@ -198,7 +217,7 @@
                 <th>Actions</th>
             </tr>
             @foreach ($posts as $post)
-                <tr>
+                <tr id="row_{{ $post->id }}">
                     <td>{{ $post->id }}</td>
                     <td>{{ $post->title }}</td>
                     <td><img width="80" src="{{ asset('uploads/' . $post->image) }}" alt=""></td>
@@ -228,17 +247,21 @@
 
                         {{-- <a href="{{ route('posts.destroy', $post->id) }}" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a> --}}
 
-                        <form class="d-inline" action="{{ route('posts.destroy', $post->id) }}" method="POST">
+                        <form class="d-inline delete-form" action="{{ route('posts.destroy', $post->id) }}" method="POST">
                             @csrf
                             @method('delete')
-                            <button onclick="return confirm('Are you sure?!')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                            {{-- <button onclick="return confirm('Are you sure?!')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button> --}}
+                            <button class="btn btn-danger btn-sm btn-delete"><i class="fas fa-trash"></i></button>
                         </form>
                     </td>
                 </tr>
             @endforeach
         </table>
 
-        {{ $posts->links() }}
+        {{-- $_GET, $_POST --}}
+
+        {{-- {{ $posts->appends(['keyword' => request()->keyword])->links() }} --}}
+        {{ $posts->appends($_GET)->links() }}
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
@@ -249,9 +272,9 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="{{ asset('globalassets/js/jquery-3.6.1.min.js') }}"></script>
     <script>
-        tinymce.init({
-          selector: '#mytextarea'
-        });
+        // tinymce.init({
+        //   selector: '#mytextarea'
+        // });
         setTimeout(() => {
             document.querySelector('.alert-success').style.display = 'none';
         }, 3000);
@@ -260,52 +283,54 @@
         //     console.log('Interval');
         // }, 1000);
 
-        // var inp = document.getElementById('inp')
-        // let inp = document.getElementById('inp')
-        let inp = document.querySelector('#inp')
-        let result = document.querySelector('.search-result')
-        // const inp = document.getElementById('inp')
+        // // var inp = document.getElementById('inp')
+        // // let inp = document.getElementById('inp')
+        // let inp = document.querySelector('#inp')
+        // let result = document.querySelector('.search-result')
+        // // const inp = document.getElementById('inp')
 
-        inp.onblur = () => {
-            result.style.display = 'none';
-        }
+        // inp.onblur = () => {
+        //     result.style.display = 'none';
+        // }
 
-        inp.onfocus = () => {
-            if (inp.value.length > 0) {
-                result.style.display = 'block';
-            }
-        }
+        // inp.onfocus = () => {
+        //     if (inp.value.length > 0) {
+        //         result.style.display = 'block';
+        //     }
+        // }
 
-        inp.onkeyup = () => {
+        // inp.onkeyup = () => {
 
-            if (inp.value.length > 0) {
-                // Ajax Request
-                axios.get("{{ route('posts.search_posts') }}", {
-                        params: {
-                            keyword: inp.value
-                        }
-                    })
-                    .then(res => {
+        //     if (inp.value.length > 0) {
+        //         // Ajax Request
+        //         axios.get("{{ route('posts.search_posts') }}", {
+        //                 params: {
+        //                     keyword: inp.value
+        //                 }
+        //             })
+        //             .then(res => {
 
-                        result.innerHTML = '';
+        //                 result.innerHTML = '';
 
-                        res.data.forEach(el => {
-                            let item = `<li><a href="#">${el.title} - ${el.views}</a></li>`;
-                            result.innerHTML += item
-                        })
+        //                 res.data.forEach(el => {
+        //                     let item = `<li><a href="#">${el.title} - ${el.views}</a></li>`;
+        //                     result.innerHTML += item
+        //                 })
 
-                        result.style.display = 'block';
+        //                 result.style.display = 'block';
 
-                    })
-            } else {
-                result.innerHTML = '';
-                result.style.display = 'none';
-            }
+        //             })
+        //     } else {
+        //         result.innerHTML = '';
+        //         result.style.display = 'none';
+        //     }
 
 
 
-        }
+        // }
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         // get old data from button
@@ -319,9 +344,11 @@
             $('#editModal input[name=title]').val(title);
             $('#editModal img').attr('src', image);
             $('#editModal textarea').val(body);
+
+            $('#edit_form .alert ul').html('');
+            $('#edit_form .alert').addClass('d-none');
             // tinymce.activeEditor.setContent(body);
         })
-
 
         // Send data using ajax
         $('#edit_form').on('submit', function(e) {
@@ -338,9 +365,107 @@
                 cache: false,
                 contentType: false,
                 success: function(res) {
-                    console.log(res);
+                    // $("#row_"+res.id+" td").remove();
+                    $("#row_"+res.id+" td:nth-child(2)").text(res.title)
+                    $("#row_"+res.id+" td:nth-child(3) img").attr('src', '/uploads/'+res.image)
+
+                    $('#editModal').modal('hide');
+
+                },
+                error: function(err) {
+                    // console.log(err.responseJSON.errors);
+
+                    // err.responseJSON.errors.forEach(el => {
+                    //     console.log(el);
+                    // })
+
+                    $('#edit_form .alert ul').html('');
+                    for (const key in err.responseJSON.errors) {
+                        let li = '<li>'+err.responseJSON.errors[key]+'</li>';
+                        $('#edit_form .alert ul').append(li);
+                        // console.log(`${key}: ${err.responseJSON.errors[key]}`);
+                    }
+
+                    $('#edit_form .alert').removeClass('d-none');
                 }
             })
+        })
+
+        $('.delete-form').on('submit', function(e) {
+            e.preventDefault();
+            let url = $(this).attr('action');
+            // let data = new FormData(this)
+            let data = $(this).serialize();
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "الان انت قاعد بتحذف نهائيا اخوي",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#fb4400',
+                cancelButtonColor: '#000',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'post',
+                        url: url,
+                        data: data,
+                        success: function(res) {
+                            $("#row_"+res).remove();
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            })
+
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Post Deleted Successfully!'
+                            })
+                        }
+                    })
+
+                }
+            })
+
+
+        })
+
+    </script>
+
+
+    <script>
+        $('#inemail').on('keyup', function() {
+            let txt = $(this).val();
+
+            if(txt.length > 0) {
+                $.ajax({
+                type: 'get',
+                url: '{{ route("check_mail") }}',
+                data: {
+                    txt: txt
+                },
+                success: function(res) {
+                    if(res == 1) {
+                        $('#inemail').removeClass('is-valid');
+                        $('#inemail').addClass('is-invalid');
+                    }else {
+                        $('#inemail').removeClass('is-invalid');
+                        $('#inemail').addClass('is-valid');
+                    }
+                }
+            })
+            }else {
+                $('#inemail').removeClass('is-valid');
+                $('#inemail').removeClass('is-invalid');
+            }
 
 
         })
