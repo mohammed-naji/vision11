@@ -283,51 +283,58 @@
         //     console.log('Interval');
         // }, 1000);
 
-        // // var inp = document.getElementById('inp')
-        // // let inp = document.getElementById('inp')
-        // let inp = document.querySelector('#inp')
-        // let result = document.querySelector('.search-result')
-        // // const inp = document.getElementById('inp')
+        // var inp = document.getElementById('inp')
+        // let inp = document.getElementById('inp')
+        let inp = document.querySelector('#inp')
+        let result = document.querySelector('.search-result')
+        // const inp = document.getElementById('inp')
 
-        // inp.onblur = () => {
-        //     result.style.display = 'none';
-        // }
+        inp.onblur = () => {
+            result.style.display = 'none';
+        }
 
-        // inp.onfocus = () => {
-        //     if (inp.value.length > 0) {
-        //         result.style.display = 'block';
-        //     }
-        // }
+        inp.onfocus = () => {
+            if (inp.value.length > 0) {
+                result.style.display = 'block';
+            }
+        }
 
-        // inp.onkeyup = () => {
+        inp.onkeyup = () => {
 
-        //     if (inp.value.length > 0) {
-        //         // Ajax Request
-        //         axios.get("{{ route('posts.search_posts') }}", {
-        //                 params: {
-        //                     keyword: inp.value
-        //                 }
-        //             })
-        //             .then(res => {
+            if (inp.value.length > 0) {
+                // Ajax Request
+                axios.get("{{ route('posts.search_posts') }}", {
+                        params: {
+                            keyword: inp.value
+                        }
+                    })
+                    .then(res => {
 
-        //                 result.innerHTML = '';
-
-        //                 res.data.forEach(el => {
-        //                     let item = `<li><a href="#">${el.title} - ${el.views}</a></li>`;
-        //                     result.innerHTML += item
-        //                 })
-
-        //                 result.style.display = 'block';
-
-        //             })
-        //     } else {
-        //         result.innerHTML = '';
-        //         result.style.display = 'none';
-        //     }
+                        result.innerHTML = '';
 
 
 
-        // }
+                        res.data.forEach(el => {
+
+                            let nt = el.title.replace(inp.value, function(match) {
+                                return "<mark>"+match+"</mark>"
+                            });
+
+                            let item = `<li><a href="#">${nt}</a></li>`;
+                            result.innerHTML += item
+                        })
+
+                        result.style.display = 'block';
+
+                    })
+            } else {
+                result.innerHTML = '';
+                result.style.display = 'none';
+            }
+
+
+
+        }
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
